@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAYHAN // BIRTHDAY GP</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #05070b;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* ---------- LOADING SCREEN ---------- */
+
+#loading {
+    position: fixed;
+    inset: 0;
+    background: #05070b;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: 1s;
+}
+
+.loader-car {
+    font-size: 70px;
+    animation: drive 1.2s infinite alternate;
+}
+
+@keyframes drive {
+    from { transform: translateX(-35px); }
+    to { transform: translateX(35px); }
+}
+
+#loading p {
+    margin-top: 20px;
+    letter-spacing: 4px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* ---------- BACKGROUND ---------- */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,40,40,.13), transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(0,140,255,.12), transparent 30%);
+    z-index: -1;
+}
+
+/* ---------- HERO ---------- */
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 30px;
+    overflow: hidden;
+}
+
+.grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg) scale(1.5);
+    transform-origin: bottom;
+    opacity: .5;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.small-title {
+    letter-spacing: 8px;
+    font-size: 12px;
+    color: #ff4141;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: clamp(60px, 13vw, 150px);
+    line-height: .85;
+    font-weight: 1000;
+    letter-spacing: -6px;
+}
+
+h1 span {
+    color: #ff3838;
+    text-shadow: 0 0 35px rgba(255,40,40,.45);
+}
+
+.subtitle {
+    margin-top: 25px;
+    font-size: 18px;
+    color: #aaa;
+}
+
+.start-btn {
+    margin-top: 40px;
+    padding: 18px 35px;
+    border: 1px solid #ff3838;
+    background: rgba(255,40,40,.1);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.start-btn:hover {
+    background: #ff3838;
+    transform: scale(1.05);
+}
+
+/* ---------- ROAD ---------- */
+
+.road {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: repeating-linear-gradient(
+        90deg,
+        white 0 70px,
+        transparent 70px 140px
+    );
+    animation: roadMove .6s linear infinite;
+}
+
+@keyframes roadMove {
+    to {
+        background-position: -140px 0;
+    }
+}
+
+.car {
+    position: absolute;
+    bottom: 70px;
+    left: -120px;
+    font-size: 65px;
+    animation: carDrive 7s linear infinite;
+    filter: drop-shadow(0 0 15px rgba(255,0,0,.5));
+}
+
+@keyframes carDrive {
+    to {
+        left: 110%;
+    }
+}
+
+/* ---------- SECTIONS ---------- */
+
+section {
+    min-height: 80vh;
+    padding: 100px 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section-label {
+    color: #ff4141;
+    letter-spacing: 4px;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: clamp(40px, 7vw, 80px);
+    margin-bottom: 30px;
+}
+
+.card {
+    max-width: 900px;
+    padding: 35px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+}
+
+/* ---------- STATS ---------- */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.stat {
+    padding: 25px;
+    border-radius: 15px;
+    background: #0d1118;
+    border: 1px solid #1d2530;
+}
+
+.stat-number {
+    font-size: 35px;
+    font-weight: 900;
+    color: #ff4141;
+}
+
+.stat-label {
+    color: #888;
+    margin-top: 7px;
+}
+
+/* ---------- RACE TIMELINE ---------- */
+
+.timeline {
+    max-width: 850px;
+    border-left: 2px solid #ff4141;
+    padding-left: 30px;
+}
+
+.event {
+    margin: 35px 0;
+    position: relative;
+}
+
+.event::before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    top: 4px;
+    width: 15px;
+    height: 15px;
+    background: #ff4141;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #ff4141;
+}
+
+.event h3 {
+    margin-bottom: 8px;
+}
+
+.event p {
+    color: #999;
+    line-height: 1.7;
+}
+
+/* ---------- GARAGE ---------- */
+
+.garage {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+    gap: 20px;
+}
+
+.car-card {
+    background: #0c1016;
+    border: 1px solid #202733;
+    border-radius: 18px;
+    padding: 30px;
+    transition: .3s;
+}
+
+.car-card:hover {
+    transform: translateY(-8px);
+    border-color: #ff4141;
+}
+
+.car-icon {
+    font-size: 65px;
+    margin-bottom: 20px;
+}
+
+.car-card h3 {
+    margin-bottom: 10px;
+}
+
+.car-card p {
+    color: #888;
+    line-height: 1.5;
+}
+
+/* ---------- GIFT ---------- */
+
+.gift-area {
+    text-align: center;
+}
+
+.gift {
+    width: 150px;
+    height: 120px;
+    margin: 30px auto;
+    background: #ff3838;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: .4s;
+    box-shadow: 0 20px 60px rgba(255,40,40,.25);
+}
+
+.gift::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: #ffd34d;
+    left: 60px;
+}
+
+.gift::after {
+    content: "";
+    position: absolute;
+    height: 25px;
+    width: 180px;
+    left: -15px;
+    top: -15px;
+    background: #ff5252;
+    border-radius: 8px;
+}
+
+.gift:hover {
+    transform: scale(1.08) rotate(-2deg);
+}
+
+#message {
+    display: none;
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 30px;
+    background: rgba(255,255,255,.06);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.1);
+    line-height: 1.8;
+}
+
+/* ---------- FINAL ---------- */
+
+.final {
+    min-height: 100vh;
+    text-align: center;
+    align-items: center;
+}
+
+.final h2 {
+    font-size: clamp(55px,10vw,110px);
+    line-height: .9;
+}
+
+.final span {
+    color: #ff3838;
+}
+
+.final p {
+    margin-top: 25px;
+    color: #999;
+    max-width: 600px;
+    line-height: 1.8;
+}
+
+/* ---------- CONFETTI ---------- */
+
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 15px;
+    top: -20px;
+    z-index: 999;
+    animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+    }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:600px) {
+
+    h1 {
+        letter-spacing: -3px;
+    }
+
+    section {
+        padding: 80px 6%;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .car {
+        font-size: 45px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+    <div class="loader-car">🏎️</div>
+    <p>INITIALIZING RAYHAN GRAND PRIX...</p>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="grid"></div>
+
+    <div class="hero-content">
+        <div class="small-title">RAYHAN GRAND PRIX • 2026</div>
+
+        <h1>
+            HAPPY<br>
+            <span>BIRTHDAY</span>
+        </h1>
+
+        <div class="subtitle">
+            Today, you're officially the driver of your own race.
+        </div>
+
+        <button class="start-btn" onclick="startRace()">
+            🏁 START ENGINE
+        </button>
+    </div>
+
+    <div class="car">🏎️</div>
+    <div class="road"></div>
+
+</section>
+
+<!-- INTRO -->
+<section id="race">
+
+    <div class="section-label">01 / DRIVER PROFILE</div>
+
+    <div class="section-title">
+        RAYHAN.
+    </div>
+
+    <div class="card">
+        <p style="color:#aaa; line-height:1.9;">
+            Happy Birthday bro! 🎂
+            <br><br>
+            You've been part of the journey for years, through
+            school, random conversations, stupid moments,
+            good memories and everything in between.
+            <br><br>
+            So instead of sending you a boring
+            <strong>"Happy Birthday 🎉"</strong>,
+            I decided to build an entire racing website for you.
+        </p>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">🏎️</div>
+                <div class="stat-label">Car Enthusiast</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number">🔥</div>
+                <div class="stat-label">Certified Bro</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number">2026</div>
+                <div class="stat-label">Birthday GP</div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- FRIENDSHIP TIMELINE -->
+<section>
+
+    <div class="section-label">02 / RACE HISTORY</div>
+
+    <div class="section-title">
+        THE JOURNEY.
+    </div>
+
+    <div class="timeline">
+
+        <div class="event">
+            <h3>🏁 Starting Grid</h3>
+            <p>
+                Somewhere along the way, we became friends.
+                And somehow the race kept going.
+            </p>
+        </div>
+
+        <div class="event">
+            <h3>🚗 More Laps</h3>
+            <p>
+                More school days, more random moments,
+                more memories and more absolute nonsense.
+            </p>
+        </div>
+
+        <div class="event">
+            <h3>⚡ Full Speed</h3>
+            <p>
+                And now we're here, still making memories.
+                The race isn't even close to finished.
+            </p>
+        </div>
+
+        <div class="event">
+            <h3>🏆 Next Season</h3>
+            <p>
+                Here's to whatever comes next.
+                New places. New memories. New races.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- GARAGE -->
+<section>
+
+    <div class="section-label">03 / THE GARAGE</div>
+
+    <div class="section-title">
+        RAYHAN'S GARAGE.
+    </div>
+
+    <div class="garage">
+
+        <div class="car-card">
+            <div class="car-icon">🏎️</div>
+            <h3>Track Machine</h3>
+            <p>
+                Built for speed. Built for corners.
+                Built to send it.
+            </p>
+        </div>
+
+        <div class="car-card">
+            <div class="car-icon">🏁</div>
+            <h3>Race Day</h3>
+            <p>
+                Lights out. Engines screaming.
+                No looking back.
+            </p>
+        </div>
+
+        <div class="car-card">
+            <div class="car-icon">🚘</div>
+            <h3>Daily Driver</h3>
+            <p>
+                Even the fastest drivers need
+                something for the normal days.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- GIFT -->
+<section class="gift-area">
+
+    <div class="section-label">04 / SECRET GARAGE</div>
+
+    <div class="section-title">
+        ONE LAST THING.
+    </div>
+
+    <p style="color:#888;">
+        Something is waiting in the garage...
+    </p>
+
+    <div class="gift" onclick="openGift()"></div>
+
+    <div id="message">
+        <h2 style="margin-bottom:20px;">
+            🎂 HAPPY BIRTHDAY RAYHAN!
+        </h2>
+
+        <p>
+            Hope you have an absolutely amazing birthday, bro.
+            Keep doing what you love, keep chasing your goals,
+            and keep being yourself.
+            <br><br>
+            Whatever road you take next,
+            I hope it's a good one.
+            🏎️🔥
+            <br><br>
+            — Marcus
+        </p>
+    </div>
+
+</section>
+
+<!-- FINAL -->
+<section class="final">
+
+    <div class="section-label">FINAL LAP</div>
+
+    <h2>
+        SEE YOU<br>
+        <span>AT THE FINISH LINE.</span>
+    </h2>
+
+    <p>
+        Happy Birthday, Rayhan. 🎂
+        <br>
+        This season is yours.
+    </p>
+
+</section>
+
+<script>
+
+/* Loading screen */
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+
+        document.getElementById("loading").style.opacity = "0";
+
+        setTimeout(() => {
+            document.getElementById("loading").style.display = "none";
+        }, 1000);
+
+    }, 1400);
+
+});
+
+
+/* Start race */
+
+function startRace() {
+
+    document.getElementById("race").scrollIntoView({
+        behavior: "smooth"
+    });
+
+    confetti();
+
+}
+
+
+/* Gift */
+
+function openGift() {
+
+    const message = document.getElementById("message");
+
+    message.style.display = "block";
+
+    confetti();
+
+    message.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* Confetti */
+
+function confetti() {
+
+    for(let i = 0; i < 80; i++) {
+
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left = Math.random() * 100 + "vw";
+
+        piece.style.background =
+            ["#ff3838","#ffd34d","#ffffff","#4da6ff"]
+            [Math.floor(Math.random()*4)];
+
+        piece.style.animationDuration =
+            (2 + Math.random()*2) + "s";
+
+        piece.style.animationDelay =
+            Math.random() + "s";
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => {
+            piece.remove();
+        }, 5000);
+
+    }
+
+}
+
+</script>
+
+</body>
+  </html>
